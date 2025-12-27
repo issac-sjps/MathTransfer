@@ -3,78 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathLink Pro v3.1 | 老師專用轉換器</title>
+    <title>MathLink Pro v4 | 極簡純淨版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .code-font { font-family: 'JetBrains Mono', monospace; }
-        #preview .mjx-chtml { font-size: 1.5em !important; }
+        #preview .mjx-chtml { font-size: 1.6em !important; color: #1e293b; }
+        .transition-all { transition: all 0.2s ease-in-out; }
     </style>
 </head>
 <body class="min-h-screen">
 
     <div class="flex flex-col md:flex-row min-h-screen">
-        <aside class="w-full md:w-64 bg-white border-r border-slate-200 p-6 flex-shrink-0">
-            <div class="flex items-center gap-2 mb-8">
-                <div class="bg-blue-600 text-white p-2 rounded-xl">
+        <aside class="w-full md:w-64 bg-white border-r border-slate-200 p-6 flex-shrink-0 flex flex-col">
+            <div class="flex items-center gap-3 mb-10">
+                <div class="bg-blue-600 text-white p-2 rounded-xl shadow-lg shadow-blue-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                 </div>
-                <h2 class="text-xl font-bold text-slate-800 tracking-tight">MathLink v3.1</h2>
+                <h2 class="text-xl font-bold text-slate-800 tracking-tight">MathLink v4</h2>
             </div>
-            <nav class="space-y-4">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">快速工具</p>
-                <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all" onclick="insertFormula('\\frac{a}{b}')">分式</button>
-                <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all" onclick="insertFormula('\\sqrt{x}')">根號</button>
-                <button class="w-full text-left px-3 py-2 text-sm text-orange-600 hover:bg-orange-50 rounded-lg transition-all" onclick="fixPdfText()">✨ 修復 PDF 符號</button>
+
+            <nav class="flex-1 space-y-1">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">快速插入</p>
+                <button class="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all flex justify-between" onclick="insertFormula('\\frac{a}{b}')">分式 <span>\(\frac{a}{b}\)</span></button>
+                <button class="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all flex justify-between" onclick="insertFormula('\\sqrt{x}')">根號 <span>\(\sqrt{x}\)</span></button>
+                <button class="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all" onclick="insertFormula('x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}')">求根公式</button>
+                <button class="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all" onclick="insertFormula('\\begin{cases} x+y=5 \\\\ x-y=1 \\end{cases}')">聯立方程式</button>
+                
+                <div class="pt-6 mt-6 border-t border-slate-100">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">修正工具</p>
+                    <button class="w-full text-left px-4 py-2.5 text-sm text-orange-600 hover:bg-orange-50 rounded-xl transition-all flex items-center gap-2" onclick="fixPdfText()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        修復 PDF 符號
+                    </button>
+                </div>
             </nav>
+            
+            <div class="bg-slate-50 rounded-2xl p-4 mt-auto">
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                    已自動過濾 Google Lens 的 <code class="text-red-500">\( \)</code> 與 <code class="text-blue-500">$</code> 標籤。
+                </p>
+            </div>
         </aside>
 
-        <main class="flex-1 p-6 md:p-8">
-            <header class="mb-6 flex justify-between items-center">
+        <main class="flex-1 p-6 md:p-12 max-w-4xl mx-auto w-full">
+            <header class="mb-10 flex justify-between items-end">
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-800">公式編輯器</h1>
-                    <p class="text-xs text-slate-400">已啟用：Google Lens 標籤自動過濾 (\( \) 修復)</p>
+                    <h1 class="text-3xl font-bold text-slate-800 tracking-tight">數學公式編輯器</h1>
+                    <p class="text-slate-500 mt-2">輸入 LaTeX，自動清洗標籤，一鍵導出至 Word。</p>
                 </div>
-                <div id="copyStatus" class="bg-green-500 text-white px-4 py-1.5 rounded-full text-sm font-bold opacity-0 transition-opacity">已複製！</div>
+                <div id="copyStatus" class="bg-green-600 text-white px-6 py-2 rounded-full text-sm font-bold opacity-0 transition-all shadow-lg shadow-green-100 translate-y-2">
+                    ✓ 已成功複製 MathML
+                </div>
             </header>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="space-y-6">
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                        <textarea id="input" 
-                            class="w-full h-40 p-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-4 focus:ring-blue-100 outline-none transition-all code-font text-base"
-                            placeholder="貼上 Lens 複製的內容 (自動過濾 \( \)...)"
-                            oninput="autoConvert()"></textarea>
-                        <button onclick="copyToWord()" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all">
-                            一鍵複製到 Word
-                        </button>
+            <div class="space-y-8">
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <label class="text-sm font-bold text-slate-700">LaTeX 原始碼</label>
+                        <button onclick="clearAll()" class="text-xs text-slate-400 hover:text-red-500 transition-colors">清空所有內容</button>
                     </div>
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                        <div id="preview" class="w-full min-h-[120px] flex items-center justify-center p-4 bg-white border-2 border-dashed border-slate-100 rounded-xl overflow-x-auto">
-                            <span class="text-slate-300">預覽區...</span>
-                        </div>
-                    </div>
+                    <textarea id="input" 
+                        class="w-full h-56 p-6 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:bg-white outline-none transition-all code-font text-xl text-slate-700 placeholder:text-slate-300"
+                        placeholder="在此貼上 Google Lens 或 AI 輸出的公式..."
+                        oninput="autoConvert()"></textarea>
+                    
+                    <button onclick="copyToWord()" class="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-xl shadow-blue-200 transition-all transform active:scale-[0.99] flex items-center justify-center gap-3 text-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                        複製到 Word (MathML)
+                    </button>
                 </div>
 
-                <div class="bg-slate-800 rounded-2xl p-6 flex flex-col min-h-[400px]">
-                    <div id="screenshotContainer" class="flex-1 flex items-center justify-center border-2 border-white/10 border-dashed rounded-xl overflow-hidden">
-                        <p id="placeholder" class="text-white/30 text-center">按下 Ctrl + V<br>貼上截圖對照</p>
-                        <img id="pastedImage" class="hidden max-w-full max-h-full object-contain" />
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
+                    <label class="text-sm font-bold text-slate-400 block mb-6 uppercase tracking-widest text-center">即時渲染結果</label>
+                    <div id="preview" class="w-full min-h-[160px] flex items-center justify-center border-4 border-dotted border-slate-50 rounded-2xl p-6 bg-white overflow-x-auto">
+                        <span class="text-slate-300 italic">等待輸入內容...</span>
                     </div>
                 </div>
             </div>
+            
+            <footer class="mt-12 text-center text-slate-300 text-[10px] tracking-widest font-bold uppercase">
+                Designed for Teachers • Clean Edition
+            </footer>
         </main>
     </div>
 
     <script>
         const inputArea = document.getElementById('input');
         const previewArea = document.getElementById('preview');
+        const statusMsg = document.getElementById('copyStatus');
 
-        // 改良後的過濾器：支援 \(\) 和 \[]
+        // 改良過濾器：自動移除 $$, $, \(\), \[\]
         function cleanLatex(text) {
             return text.trim()
                 .replace(/^\$\$+|\$\$+$/g, '') 
@@ -90,7 +113,7 @@
             timer = setTimeout(() => {
                 let text = cleanLatex(inputArea.value);
                 if (!text) {
-                    previewArea.innerHTML = '<span class="text-slate-300">預覽區...</span>';
+                    previewArea.innerHTML = '<span class="text-slate-300 italic">等待輸入內容...</span>';
                     return;
                 }
                 previewArea.innerHTML = '$$' + text + '$$';
@@ -104,34 +127,31 @@
             try {
                 const mml = MathJax.tex2mml(text);
                 navigator.clipboard.writeText(mml).then(() => {
-                    const status = document.getElementById('copyStatus');
-                    status.style.opacity = '1';
-                    setTimeout(() => { status.style.opacity = '0'; }, 2000);
+                    statusMsg.style.opacity = '1';
+                    statusMsg.style.transform = 'translateY(0)';
+                    setTimeout(() => { 
+                        statusMsg.style.opacity = '0'; 
+                        statusMsg.style.transform = 'translateY(8px)';
+                    }, 2500);
                 });
-            } catch (err) { alert('語法有誤'); }
+            } catch (err) { alert('轉換失敗，請檢查 LaTeX 語法。'); }
         }
 
-        // 截圖貼上功能
-        document.addEventListener('paste', function (e) {
-            const items = e.clipboardData.items;
-            for (let i = 0; i < items.length; i++) {
-                if (items[i].type.indexOf('image') !== -1) {
-                    const blob = items[i].getAsFile();
-                    document.getElementById('pastedImage').src = URL.createObjectURL(blob);
-                    document.getElementById('pastedImage').classList.remove('hidden');
-                    document.getElementById('placeholder').classList.add('hidden');
-                }
-            }
-        });
-
         function insertFormula(l) {
-            inputArea.value += l;
+            const start = inputArea.selectionStart;
+            const end = inputArea.selectionEnd;
+            inputArea.value = inputArea.value.substring(0, start) + l + inputArea.value.substring(end);
+            inputArea.focus();
             autoConvert();
         }
 
         function fixPdfText() {
-            inputArea.value = inputArea.value.replace(/√/g, '\\sqrt{').replace(/±/g, '\\pm ');
+            inputArea.value = inputArea.value.replace(/√/g, '\\sqrt{').replace(/±/g, '\\pm ').replace(/π/g, '\\pi ');
             autoConvert();
+        }
+
+        function clearAll() {
+            if(confirm('確定要清空嗎？')) { inputArea.value = ''; autoConvert(); }
         }
     </script>
 </body>
