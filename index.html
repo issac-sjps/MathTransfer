@@ -3,202 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathLink Pro | 老師專用數學編輯器</title>
+    <title>MathLink Pro v3 | 截圖對照版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
         .code-font { font-family: 'JetBrains Mono', monospace; }
         .sidebar-item { @apply w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all mb-1 flex items-center justify-between; }
-        #preview .mjx-chtml { font-size: 1.4em !important; }
-        /* 自定義捲軸 */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        #preview .mjx-chtml { font-size: 1.5em !important; }
+        .drop-shadow-blue { filter: drop-shadow(0 10px 15px rgba(37, 99, 235, 0.2)); }
     </style>
 </head>
 <body class="min-h-screen">
 
     <div class="flex flex-col md:flex-row min-h-screen">
-        <aside class="w-full md:w-72 bg-white border-r border-slate-200 p-6 flex-shrink-0 flex flex-col">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="bg-blue-600 text-white p-2 rounded-xl shadow-lg shadow-blue-200">
+        <aside class="w-full md:w-64 bg-white border-r border-slate-200 p-6 flex-shrink-0">
+            <div class="flex items-center gap-2 mb-8">
+                <div class="bg-blue-600 text-white p-2 rounded-xl">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                 </div>
-                <div>
-                    <h2 class="text-xl font-bold text-slate-800 tracking-tight">MathLink Pro</h2>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Teacher Edition</p>
-                </div>
+                <h2 class="text-xl font-bold text-slate-800">MathLink v3</h2>
             </div>
 
-            <div class="flex-1 overflow-y-auto pr-2">
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">國中常用公式</p>
-                <button class="sidebar-item" onclick="insertFormula('\\frac{a}{b}')">分式 <span>\(\frac{a}{b}\)</span></button>
-                <button class="sidebar-item" onclick="insertFormula('\\sqrt{x}')">根號 <span>\(\sqrt{x}\)</span></button>
-                <button class="sidebar-item" onclick="insertFormula('a^2 + b^2 = c^2')">畢氏定理</button>
-                <button class="sidebar-item" onclick="insertFormula('x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}')">求根公式</button>
-                <button class="sidebar-item" onclick="insertFormula('\\begin{cases} x+y=5 \\\\ x-y=1 \\end{cases}')">聯立方程</button>
-                <button class="sidebar-item" onclick="insertFormula('\\pi r^2')">圓面積</button>
-                <button class="sidebar-item" onclick="insertFormula('y = ax^2 + bx + c')">二次函數</button>
-                
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-8 mb-3">進階修正工具</p>
-                <button class="sidebar-item text-orange-600 hover:bg-orange-50 group" onclick="fixPdfText()">
-                    <span class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                        修復 PDF 複製文字
-                    </span>
-                </button>
-            </div>
-            
-            <div class="mt-6 pt-6 border-t border-slate-100">
-                <div class="bg-slate-50 rounded-xl p-4 text-[11px] text-slate-500 leading-relaxed">
-                    <strong>提示：</strong>貼到 Word 後，若沒變公式，請按 <span class="bg-white border px-1 rounded shadow-sm text-slate-800">Ctrl</span> 選「只保留文字」。
+            <nav class="space-y-6">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">常用公式</p>
+                    <button class="sidebar-item" onclick="insertFormula('\\frac{a}{b}')">分式 <span>\(\frac{a}{b}\)</span></button>
+                    <button class="sidebar-item" onclick="insertFormula('\\sqrt{x}')">根號 <span>\(\sqrt{x}\)</span></button>
+                    <button class="sidebar-item" onclick="insertFormula('x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}')">求根公式</button>
+                    <button class="sidebar-item" onclick="insertFormula('\\begin{cases} x+y=5 \\\\ x-y=1 \\end{cases}')">聯立方程</button>
                 </div>
-            </div>
+                
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">PDF 工具</p>
+                    <button class="sidebar-item text-orange-600 hover:bg-orange-50" onclick="fixPdfText()">✨ 修復 PDF 符號</button>
+                </div>
+            </nav>
         </aside>
 
-        <main class="flex-1 p-6 md:p-10 flex flex-col max-w-5xl mx-auto w-full">
-            <header class="mb-8 flex justify-between items-end">
-                <div>
-                    <h1 class="text-3xl font-bold text-slate-800">公式編輯器</h1>
-                    <p class="text-slate-500 mt-1">自動清洗 $ 符號，為 Word 考卷排版優化</p>
-                </div>
-                <div id="copyStatus" class="bg-green-500 text-white px-6 py-2 rounded-full text-sm font-bold opacity-0 transition-all shadow-lg shadow-green-100">
-                    ✓ 已成功複製 MathML
-                </div>
+        <main class="flex-1 p-6 md:p-8">
+            <header class="mb-6 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-slate-800">公式編輯器 <span class="text-blue-500 font-normal text-sm ml-2">支援 Ctrl+V 貼上截圖</span></h1>
+                <div id="copyStatus" class="bg-green-500 text-white px-4 py-1.5 rounded-full text-sm font-bold opacity-0 transition-opacity">已成功複製！</div>
             </header>
 
-            <div class="grid grid-cols-1 gap-8 flex-1">
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <label class="text-sm font-bold text-slate-700 flex items-center gap-2">
-                            LaTeX 原始碼輸入
-                            <span class="font-normal text-slate-400 text-xs">(支援多行輸入)</span>
-                        </label>
-                        <button onclick="clearAll()" class="text-xs text-slate-400 hover:text-red-500 transition-colors">清空所有內容</button>
-                    </div>
-                    <textarea id="input" 
-                        class="w-full h-48 p-6 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:bg-white outline-none transition-all code-font text-lg text-slate-700 placeholder:text-slate-300"
-                        placeholder="在此輸入或貼上 LaTeX 代碼..."
-                        oninput="autoConvert()"></textarea>
-                    
-                    <div class="mt-6">
-                        <button onclick="copyToWord()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-2xl shadow-xl shadow-blue-200 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3 text-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
-                            複製到 Word (自動去 $ 標籤)
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-sm font-bold text-slate-700">LaTeX 原始碼</label>
+                            <button onclick="clearAll()" class="text-xs text-slate-400 hover:text-red-500">清空</button>
+                        </div>
+                        <textarea id="input" 
+                            class="w-full h-40 p-4 bg-slate-50 border border-slate-100 rounded-xl focus:ring-4 focus:ring-blue-100 outline-none transition-all code-font text-base"
+                            placeholder="請在此輸入代碼，或直接在網頁按 Ctrl+V 貼上截圖對照..."
+                            oninput="autoConvert()"></textarea>
+                        
+                        <button onclick="copyToWord()" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-100 transition-all flex items-center justify-center gap-2">
+                            一鍵複製到 Word
                         </button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                        <label class="text-sm font-bold text-slate-700 block mb-4 italic text-blue-600">公式轉換成果：</label>
+                        <div id="preview" class="w-full min-h-[120px] flex items-center justify-center border-2 border-dashed border-slate-100 rounded-xl p-4 overflow-x-auto bg-white">
+                            <span class="text-slate-300">等待輸入...</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
-                    <label class="text-sm font-bold text-slate-700 block mb-6 uppercase tracking-widest">即時渲染預覽</label>
-                    <div id="preview" class="w-full min-h-[180px] flex items-center justify-center border-4 border-dotted border-slate-50 rounded-2xl overflow-x-auto p-6 bg-white">
-                        <span class="text-slate-300 italic">等待輸入公式...</span>
+                <div class="bg-slate-800 rounded-2xl p-6 shadow-inner relative flex flex-col min-h-[400px]">
+                    <div class="flex justify-between items-center mb-4">
+                        <label class="text-sm font-bold text-white/70">PDF 原題截圖對照</label>
+                        <button onclick="clearImage()" id="clearImgBtn" class="hidden text-xs text-white/40 hover:text-white underline">清除圖片</button>
                     </div>
+                    
+                    <div id="screenshotContainer" class="flex-1 flex items-center justify-center border-2 border-white/10 border-dashed rounded-xl overflow-hidden relative">
+                        <div id="pastedImagePlaceholder" class="text-center p-8">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white/20 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            <p class="text-white/30 text-sm">按下 Ctrl + V<br>貼上 PDF 截圖方便對照</p>
+                        </div>
+                        <img id="pastedImage" class="hidden max-w-full max-h-full object-contain" />
+                    </div>
+                    <p class="text-white/20 text-[10px] mt-4 text-center tracking-widest uppercase">Screenshot Reference Mode</p>
                 </div>
             </div>
-            
-            <footer class="mt-12 text-center">
-                <p class="text-slate-400 text-xs tracking-widest font-medium">DESIGNED FOR MATH TEACHERS • v2.5 PRO</p>
-            </footer>
         </main>
     </div>
 
     <script>
-        let timer;
         const inputArea = document.getElementById('input');
         const previewArea = document.getElementById('preview');
-        const statusMsg = document.getElementById('copyStatus');
+        const pastedImage = document.getElementById('pastedImage');
+        const placeholder = document.getElementById('pastedImagePlaceholder');
+        const clearImgBtn = document.getElementById('clearImgBtn');
 
-        // 清洗邏輯：移除字首與字尾的 $ 或 $$
-        function cleanLatex(text) {
-            return text.trim()
-                       .replace(/^\$\$+|\$\$+$/g, '') // 移除頭尾 $$
-                       .replace(/^\$+|\$+$/g, '')     // 移除頭尾 $
-                       .trim();
+        // 監聽貼上事件 (圖片偵測)
+        document.addEventListener('paste', function (e) {
+            const items = e.clipboardData.items;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    const blob = items[i].getAsFile();
+                    const imageURL = URL.createObjectURL(blob);
+                    
+                    pastedImage.src = imageURL;
+                    pastedImage.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                    clearImgBtn.classList.remove('hidden');
+                }
+            }
+        });
+
+        function clearImage() {
+            pastedImage.src = '';
+            pastedImage.classList.add('hidden');
+            placeholder.classList.remove('hidden');
+            clearImgBtn.classList.add('hidden');
         }
 
-        // 自動預覽邏輯
+        // 自動去背 & 預覽邏輯
+        function cleanLatex(text) {
+            return text.trim().replace(/^\$\$+|\$\$+$/g, '').replace(/^\$+|\$+$/g, '').trim();
+        }
+
+        let timer;
         function autoConvert() {
             clearTimeout(timer);
             timer = setTimeout(() => {
-                let text = inputArea.value.trim();
-                text = cleanLatex(text);
-
+                let text = cleanLatex(inputArea.value);
                 if (!text) {
-                    previewArea.innerHTML = '<span class="text-slate-300 italic">等待輸入公式...</span>';
+                    previewArea.innerHTML = '<span class="text-slate-300">等待輸入...</span>';
                     return;
                 }
-
-                // 渲染預覽
                 previewArea.innerHTML = '$$' + text + '$$';
-                if (window.MathJax) {
-                    MathJax.typesetPromise();
-                }
+                MathJax.typesetPromise();
             }, 250);
         }
 
-        // 插入公式模板
+        // 複製到 Word (MathML)
+        function copyToWord() {
+            let text = cleanLatex(inputArea.value);
+            if (!text) return;
+            try {
+                const mml = MathJax.tex2mml(text);
+                navigator.clipboard.writeText(mml).then(() => {
+                    const status = document.getElementById('copyStatus');
+                    status.style.opacity = '1';
+                    setTimeout(() => { status.style.opacity = '0'; }, 2000);
+                });
+            } catch (err) { alert('語法錯誤！'); }
+        }
+
         function insertFormula(latex) {
             const start = inputArea.selectionStart;
             const end = inputArea.selectionEnd;
-            const text = inputArea.value;
-            inputArea.value = text.substring(0, start) + latex + text.substring(end);
+            inputArea.value = inputArea.value.substring(0, start) + latex + inputArea.value.substring(end);
             inputArea.focus();
             autoConvert();
         }
 
-        // 核心：修復從 PDF 複製出來的殘缺根號與符號
         function fixPdfText() {
             let text = inputArea.value;
-            // 基礎正則替換
-            text = text.replace(/√/g, '\\sqrt{') // 將勾勾符號轉為 LaTeX 根號開頭
-                       .replace(/±/g, '\\pm ')
-                       .replace(/π/g, '\\pi ')
-                       .replace(/×/g, '\\times ')
-                       .replace(/÷/g, '\\div ');
-            
+            text = text.replace(/√/g, '\\sqrt{').replace(/±/g, '\\pm ').replace(/π/g, '\\pi ');
             inputArea.value = text;
             autoConvert();
-            alert('已執行基礎符號修復。請檢查根號是否需要手動補上右括號 "}"');
         }
 
-        // 核心：轉換並複製
-        function copyToWord() {
-            let text = inputArea.value.trim();
-            if (!text) return;
-
-            // 1. 清洗符號
-            text = cleanLatex(text);
-
-            try {
-                // 2. 將 LaTeX 轉為 MathML (Word 唯一能原生讀取的公式格式)
-                const mml = MathJax.tex2mml(text);
-
-                // 3. 寫入剪貼簿
-                navigator.clipboard.writeText(mml).then(() => {
-                    statusMsg.style.opacity = '1';
-                    statusMsg.style.transform = 'translateY(0)';
-                    setTimeout(() => { 
-                        statusMsg.style.opacity = '0';
-                        statusMsg.style.transform = 'translateY(10px)';
-                    }, 3000);
-                });
-            } catch (err) {
-                alert('轉換錯誤：請檢查 LaTeX 語法是否有誤（例如括號沒對齊）。');
-                console.error(err);
-            }
-        }
-
-        function clearAll() {
-            if(confirm('確定要清空所有內容嗎？')) {
-                inputArea.value = '';
-                autoConvert();
-            }
-        }
+        function clearAll() { inputArea.value = ''; autoConvert(); }
     </script>
 </body>
 </html>
