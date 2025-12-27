@@ -3,148 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathLink Pro v5.0 | 老師專用終極版</title>
+    <title>MathLink Pro v5.1 | 老師友善版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .code-font { font-family: 'JetBrains Mono', monospace; }
         #preview .mjx-chtml { font-size: 1.8em !important; color: #0f172a; }
         
-        /* 魔法按鈕特效 */
-        .btn-magic { 
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        /* 實體按鈕樣式 - 顯眼且友善 */
+        .btn-primary { 
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white; font-weight: bold;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s;
         }
-        .btn-magic:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4); }
-        .btn-magic:active { transform: translateY(0); }
-
-        /* 快捷鍵提示 */
-        .shortcut-badge { 
-            font-size: 0.7rem; background: rgba(255,255,255,0.2); 
-            padding: 2px 6px; border-radius: 4px; margin-left: 8px; opacity: 0.9;
-        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4); }
+        .btn-primary:active { transform: translateY(0); }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen flex flex-col md:flex-row">
 
-    <div class="flex flex-col md:flex-row min-h-screen">
-        <aside class="w-full md:w-72 bg-white border-r border-slate-200 p-6 flex-shrink-0 flex flex-col">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="bg-indigo-600 text-white p-2 rounded-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-slate-800 tracking-tight">MathLink v5.0</h2>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">TEACHER FINAL</p>
-                </div>
-            </div>
-
-            <div class="space-y-4 flex-1">
-                <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100 shadow-sm">
-                    <p class="text-[10px] uppercase font-bold text-indigo-500 mb-3 tracking-widest">核心修復 (NotebookLM)</p>
-                    <button class="btn-magic w-full py-4 px-4 rounded-xl flex flex-col items-center justify-center gap-1" onclick="runSmartFixAndCopy()">
-                        <div class="flex items-center gap-2 text-lg">
-                            <span>🪄</span> 強力修復 + 複製
-                        </div>
-                        <span class="text-[10px] font-normal opacity-80">或是按 Ctrl + Enter</span>
-                    </button>
-                    <p class="text-[11px] text-indigo-700 mt-3 leading-relaxed">
-                        包含：<br>
-                        ✅ 黏合斷行次方 (z 2 → z²)<br>
-                        ✅ 修復 PDF 亂碼 (L → ∠)<br>
-                        ✅ 幾何符號校正 (deg → °)
-                    </p>
-                </div>
-
-                <div>
-                    <p class="text-[10px] uppercase font-bold text-slate-400 mb-2 tracking-widest">常用幾何</p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button class="text-left px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 rounded-lg transition-colors" onclick="insertSymbol('\\angle ')">∠ 角</button>
-                        <button class="text-left px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 rounded-lg transition-colors" onclick="insertSymbol('\\triangle ')">△ 三角形</button>
-                        <button class="text-left px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 rounded-lg transition-colors" onclick="insertSymbol('^\\circ')">° 度數</button>
-                        <button class="text-left px-3 py-2 text-sm text-slate-600 bg-slate-50 hover:bg-blue-50 rounded-lg transition-colors" onclick="insertSymbol('\\pi')">π 圓周率</button>
-                    </div>
-                </div>
-            </div>
+    <aside class="w-full md:w-64 bg-white border-r border-slate-200 p-4 flex-shrink-0 flex flex-col hidden md:flex">
+        <div class="mb-6 flex items-center gap-2 text-slate-700 font-bold">
+            <span class="bg-blue-100 text-blue-600 p-1 rounded">工具箱</span>
+        </div>
+        
+        <div class="space-y-2 overflow-y-auto flex-1">
+            <p class="text-xs text-slate-400 font-bold uppercase">常用幾何</p>
+            <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded border border-transparent hover:border-slate-200" onclick="insertSymbol('\\angle ')">∠ 角</button>
+            <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded border border-transparent hover:border-slate-200" onclick="insertSymbol('\\triangle ')">△ 三角形</button>
+            <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded border border-transparent hover:border-slate-200" onclick="insertSymbol('^\\circ')">° 度數</button>
+            <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded border border-transparent hover:border-slate-200" onclick="insertSymbol('\\pi')">π 圓周率</button>
             
-            <button onclick="clearAll()" class="mt-auto text-xs text-slate-400 hover:text-red-500 py-4 border-t border-slate-100 flex justify-center items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                清空重來
-            </button>
-        </aside>
+            <p class="text-xs text-slate-400 font-bold uppercase mt-4">代數符號</p>
+            <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded border border-transparent hover:border-slate-200" onclick="insertSymbol('\\frac{a}{b}')">分数</button>
+            <button class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded border border-transparent hover:border-slate-200" onclick="insertSymbol('\\sqrt{x}')">根號</button>
+        </div>
+    </aside>
 
-        <main class="flex-1 p-6 md:p-10 max-w-6xl mx-auto w-full flex flex-col h-screen">
-            <header class="mb-6 flex justify-between items-end">
-                <div>
-                    <h1 class="text-3xl font-bold text-slate-800">出題救星</h1>
-                    <p class="text-slate-500 mt-1">貼上亂碼 → 按 <code class="bg-slate-200 px-1 rounded text-sm font-bold">Ctrl + Enter</code> → 去 Word 貼上</p>
-                </div>
-                <div id="statusToast" class="bg-emerald-500 text-white px-6 py-2 rounded-full text-sm font-bold opacity-0 transition-all translate-y-4 shadow-lg flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                    已修復並複製 MathML！
-                </div>
-            </header>
+    <main class="flex-1 p-6 md:p-10 max-w-5xl mx-auto w-full flex flex-col h-screen">
+        
+        <header class="mb-6">
+            <h1 class="text-2xl font-bold text-slate-800">數學公式轉換器 <span class="text-sm font-normal text-slate-500 ml-2">(NotebookLM 修復專用)</span></h1>
+        </header>
 
-            <div class="flex-1 flex flex-col gap-6 min-h-0">
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 flex-1 flex flex-col min-h-0">
-                    <textarea id="input" 
-                        class="w-full flex-1 p-6 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-100 outline-none transition-all code-font text-xl text-slate-700 leading-relaxed resize-none"
-                        placeholder="請貼上 NotebookLM 產生的斷行亂碼..."
-                        oninput="autoConvert()"
-                        onkeydown="checkShortcut(event)"></textarea>
-                </div>
+        <div class="flex-1 flex flex-col gap-6 min-h-0">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-1 flex-1 flex flex-col relative group focus-within:ring-4 focus-within:ring-blue-100 transition-all">
+                <textarea id="input" 
+                    class="w-full h-full p-6 bg-transparent outline-none code-font text-xl text-slate-700 leading-relaxed resize-none"
+                    placeholder="請在此貼上題目亂碼..."
+                    oninput="autoConvert()"></textarea>
+                
+                <button onclick="clearAll()" class="absolute top-4 right-4 text-slate-300 hover:text-red-500 text-sm transition-colors">
+                    清空
+                </button>
+            </div>
 
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 h-48 flex-shrink-0 flex flex-col">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 block text-center">最終 Word 呈現效果</label>
-                    <div id="preview" class="w-full flex-1 flex items-center justify-center p-4 bg-white border-2 border-dashed border-slate-100 rounded-2xl overflow-x-auto">
-                        <span class="text-slate-300 italic">等待輸入...</span>
-                    </div>
+            <div class="flex gap-4">
+                <button id="mainBtn" onclick="runSmartFixAndCopy()" class="btn-primary flex-1 py-4 rounded-xl text-lg flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                    <span>一鍵修復 並 複製到 Word</span>
+                </button>
+            </div>
+
+            <div class="bg-slate-50 rounded-2xl border border-slate-200 p-6 h-40 flex-shrink-0 flex flex-col items-center justify-center relative overflow-hidden">
+                <span class="absolute top-3 left-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">預覽結果</span>
+                <div id="preview" class="w-full overflow-x-auto text-center">
+                    <span class="text-slate-300 italic">等待輸入...</span>
+                </div>
+                
+                <div id="toast" class="absolute bottom-0 left-0 w-full bg-green-500 text-white text-center py-1 text-sm font-bold translate-y-full transition-transform">
+                    已複製！請至 Word 貼上 (選擇只保留文字)
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script>
         const inputArea = document.getElementById('input');
         const previewArea = document.getElementById('preview');
-        const toast = document.getElementById('statusToast');
+        const mainBtn = document.getElementById('mainBtn');
+        const toast = document.getElementById('toast');
 
-        // 監聽 Ctrl + Enter 快捷鍵
-        function checkShortcut(e) {
-            if (e.ctrlKey && e.key === 'Enter') {
-                runSmartFixAndCopy();
-            }
-        }
-
-        /**
-         * v5.0 終極修復邏輯
-         * 整合了：壓平斷行、黏合數字、幾何符號修復、PDF 亂碼清洗
-         */
+        // 核心修復邏輯 (保留您覺得好用的 V4.6 邏輯)
         function fixLogic(text) {
             if (!text) return "";
 
-            // 1. 壓平所有換行 (NotebookLM 斷行剋星)
+            // 1. 壓平換行
             text = text.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ');
 
-            // 2. 強力黏合：字母/括號 + (空格) + 數字 -> 次方
+            // 2. 黏合變數與數字 (z 2 -> z^2)
             text = text.replace(/([a-zA-Z\)])\s+(\d+)/g, (m, char, num) => {
                 return num.length > 1 ? `${char}^{${num}}` : `${char}^${num}`;
             });
             
-            // 3. 黏合：緊貼的數字 (x3 -> x^3)
+            // 3. 黏合緊鄰數字 (x3 -> x^3)
             text = text.replace(/([a-zA-Z\)])(\d+)/g, (m, char, num) => {
                 return num.length > 1 ? `${char}^{${num}}` : `${char}^${num}`;
             });
 
-            // 4. 幾何與符號修復 (國中數學專用)
-            text = text.replace(/L\s?([A-Z])/g, '\\angle $1') // L A -> ∠A
-                       .replace(/deg/gi, '^\\circ')            // deg -> °
+            // 4. 符號標準化
+            text = text.replace(/L\s?([A-Z])/g, '\\angle $1')
+                       .replace(/deg/gi, '^\\circ')
                        .replace(/<=/g, '\\le ')
                        .replace(/>=/g, '\\ge ')
                        .replace(/−/g, '-')
@@ -155,30 +119,30 @@
             return text.trim();
         }
 
-        // 執行修復 + 複製 (一條龍服務)
+        // 按鈕觸發的主功能
         function runSmartFixAndCopy() {
             let originalText = inputArea.value;
-            if (!originalText) return;
+            if (!originalText) {
+                alert("請先貼上內容喔！");
+                return;
+            }
 
-            // 執行修復
+            // 1. 修復
             let fixedText = fixLogic(originalText);
             inputArea.value = fixedText;
-            autoConvert(); // 更新預覽
+            autoConvert();
 
-            // 執行複製
+            // 2. 複製
             copyToWord(fixedText);
         }
 
-        function cleanLatex(text) {
-            return text.trim()
-                .replace(/```[a-z]*\n?/gi, '').replace(/```/g, '')
-                .replace(/^\$\$+|\$\$+$/g, '').replace(/^\$+|\$+$/g, '')
-                .replace(/^\\\(+|\\\)+$/g, '').replace(/^\\\[+|\\\]+$/g, '')
-                .trim();
-        }
-
         function autoConvert() {
-            let text = cleanLatex(inputArea.value);
+            let text = inputArea.value.trim();
+            // 清除頭尾干擾符號
+            text = text.replace(/```[a-z]*\n?/gi, '').replace(/```/g, '')
+                       .replace(/^\$\$+|\$\$+$/g, '').replace(/^\$+|\$+$/g, '')
+                       .replace(/^\\\(+|\\\)+$/g, '').replace(/^\\\[+|\\\]+$/g, '');
+            
             if (!text) {
                 previewArea.innerHTML = '<span class="text-slate-300 italic">等待輸入...</span>';
                 return;
@@ -187,15 +151,26 @@
             if (window.MathJax) MathJax.typesetPromise();
         }
 
-        function copyToWord(textInput) {
-            let text = textInput || cleanLatex(inputArea.value);
-            if (!text) return;
+        function copyToWord(text) {
             try {
                 const mml = MathJax.tex2mml(text);
                 navigator.clipboard.writeText(mml).then(() => {
+                    // 按鈕回饋動畫
+                    const originalContent = mainBtn.innerHTML;
+                    mainBtn.innerHTML = `<span>✅ 複製成功！</span>`;
+                    mainBtn.classList.remove('from-blue-600', 'to-blue-700');
+                    mainBtn.classList.add('bg-green-600');
+                    
                     showToast();
+
+                    // 2秒後恢復按鈕
+                    setTimeout(() => {
+                        mainBtn.innerHTML = originalContent;
+                        mainBtn.classList.add('from-blue-600', 'to-blue-700');
+                        mainBtn.classList.remove('bg-green-600');
+                    }, 2000);
                 });
-            } catch (err) { alert('轉換失敗，請檢查內容'); }
+            } catch (err) { alert('轉換失敗'); }
         }
 
         function insertSymbol(sym) {
@@ -207,16 +182,12 @@
         }
 
         function showToast() {
-            toast.style.opacity = '1';
             toast.style.transform = 'translateY(0)';
-            setTimeout(() => { 
-                toast.style.opacity = '0'; 
-                toast.style.transform = 'translateY(16px)';
-            }, 2000);
+            setTimeout(() => { toast.style.transform = 'translateY(100%)'; }, 2000);
         }
 
         function clearAll() { 
-            if(inputArea.value && confirm('確定清空？')) { 
+            if(confirm('確定要清空嗎？')) { 
                 inputArea.value = ''; 
                 autoConvert(); 
             } 
