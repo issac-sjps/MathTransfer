@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathLink Pro v4.5 | 斷行次方救援版</title>
+    <title>MathLink Pro v4.6 | 強力黏合版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -13,55 +13,58 @@
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .code-font { font-family: 'JetBrains Mono', monospace; }
         #preview .mjx-chtml { font-size: 1.8em !important; color: #1e293b; }
-        .btn-magic { @apply bg-gradient-to-br from-indigo-600 to-blue-700 text-white font-bold py-4 px-6 rounded-2xl shadow-xl hover:from-indigo-700 hover:to-blue-800 transition-all flex items-center justify-center gap-3 text-lg; }
+        /* 魔法按鈕特效 */
+        .btn-magic { 
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+            transition: all 0.2s ease;
+        }
+        .btn-magic:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4); }
+        .btn-magic:active { transform: translateY(0); }
     </style>
 </head>
 <body class="min-h-screen">
 
     <div class="flex flex-col md:flex-row min-h-screen">
-        <aside class="w-full md:w-72 bg-white border-r border-slate-200 p-6 flex-shrink-0 flex flex-col shadow-sm">
-            <div class="flex items-center gap-3 mb-10">
+        <aside class="w-full md:w-72 bg-white border-r border-slate-200 p-6 flex-shrink-0 flex flex-col">
+            <div class="flex items-center gap-3 mb-8">
                 <div class="bg-indigo-600 text-white p-2 rounded-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 </div>
-                <h2 class="text-xl font-bold text-slate-800 tracking-tight">MathLink v4.5</h2>
+                <h2 class="text-xl font-bold text-slate-800 tracking-tight">MathLink v4.6</h2>
             </div>
 
-            <div class="space-y-6 flex-1">
-                <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">核心救援工具</p>
-                    <button class="btn-magic w-full transform active:scale-95" onclick="superFixV2()">
-                        <span>🚀</span> 一鍵修復斷行次方
+            <div class="space-y-4 flex-1">
+                <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
+                    <p class="text-[10px] uppercase font-bold text-indigo-400 mb-2 tracking-widest">NotebookLM 修復專用</p>
+                    <button class="btn-magic w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2" onclick="forceGlueFix()">
+                        <span>🪄</span> 強力黏合修復
                     </button>
-                </div>
-
-                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-4">
-                    <p class="text-xs text-indigo-700 font-bold mb-2 flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></p>
-                    <p class="text-[11px] text-indigo-600 leading-relaxed">
-                        針對 NotebookLM 的 <strong>x\n3</strong> 或 <strong>) \n3</strong> 格式進行智慧合併，自動轉換為 <strong>^3</strong>。
+                    <p class="text-[10px] text-indigo-700 mt-3 leading-relaxed">
+                        專門解決：<br>
+                        1. <strong>z (換行) 2</strong> → z^2<br>
+                        2. <strong>) (換行) 3</strong> → )^3<br>
+                        3. <strong>x 2</strong> (有空白) → x^2
                     </p>
                 </div>
             </div>
             
-            <button onclick="clearAll()" class="text-xs text-slate-400 hover:text-red-500 transition-colors py-4">清空內容</button>
+            <button onclick="clearAll()" class="mt-auto text-xs text-slate-400 hover:text-red-500 py-4 border-t border-slate-100">清空重來</button>
         </aside>
 
-        <main class="flex-1 p-6 md:p-12 max-w-4xl mx-auto w-full">
-            <header class="mb-10">
-                <h1 class="text-3xl font-bold text-slate-800">NotebookLM 公式救援站</h1>
-                <p class="text-slate-500 mt-2 italic">自動抓回掉到下一行的次方數字，專為國中數學設計</p>
+        <main class="flex-1 p-6 md:p-12 max-w-5xl mx-auto w-full">
+            <header class="mb-8">
+                <h1 class="text-3xl font-bold text-slate-800">斷行次方強力修復器</h1>
+                <p class="text-slate-500 mt-2">將被切斷的數字重新「黏」回變數上</p>
             </header>
 
-            <div class="space-y-8">
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
-                    <div class="mb-4 flex justify-between items-center">
-                        <label class="text-sm font-bold text-slate-700">輸入區 (貼上斷行內容)</label>
-                        <span class="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500 font-mono">Input Mode: Multi-line</span>
-                    </div>
+            <div class="space-y-6">
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
                     <textarea id="input" 
-                        class="w-full h-64 p-6 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:bg-white outline-none transition-all code-font text-xl text-slate-700 leading-[1.8]"
-                        placeholder="a(x&#10;3&#10;+y&#10;3)..."
+                        class="w-full h-60 p-6 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-100 outline-none transition-all code-font text-xl text-slate-700 leading-relaxed"
+                        placeholder="請貼上亂碼，例如：&#10;x&#10;3&#10;+ z&#10;2 ..."
                         oninput="autoConvert()"></textarea>
                     
                     <button onclick="copyToWord()" class="w-full mt-6 bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-lg transition-all">
@@ -70,7 +73,7 @@
                 </div>
 
                 <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 block text-center italic">轉換後成果對照</label>
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 block text-center">修復後預覽</label>
                     <div id="preview" class="w-full min-h-[160px] flex items-center justify-center p-6 bg-white border-2 border-dashed border-slate-100 rounded-2xl overflow-x-auto">
                         <span class="text-slate-300 italic">等待輸入...</span>
                     </div>
@@ -84,31 +87,34 @@
         const previewArea = document.getElementById('preview');
 
         /**
-         * v4.5 智慧修復核心邏輯
+         * v4.6 強力黏合邏輯：
+         * 不管中間是換行還是空白，全部視為「間隔」，然後把間隔消除並加上 ^
          */
-        function superFixV2() {
+        function forceGlueFix() {
             let text = inputArea.value;
             if (!text) return;
 
-            // 1. 處理「跨行次方」：字母/右括號 + 換行(含空白) + 數字
-            // 正規表示式：抓取 [字母或括號] 後方緊跟著 [換行與空白] 以及 [純數字]
-            text = text.replace(/([a-zA-Z\)])\s*\n\s*(\d+)/g, function(match, char, num) {
+            // 1. 【關鍵步驟】先將所有的換行符號 (\n) 和多餘空白全部轉為「單一空白」
+            // 這樣 x \n 3 就會變成 x 3，讓結構變得線性好處理
+            text = text.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ');
+
+            // 2. 【核心修復 1】偵測 "字母/括號" + "空白" + "數字"
+            // 這就是處理 "z 2" 的情況
+            text = text.replace(/([a-zA-Z\)])\s+(\d+)/g, function(match, char, num) {
+                // 如果數字大於1位數，加上{}，否則直接^
                 return num.length > 1 ? `${char}^{${num}}` : `${char}^${num}`;
             });
 
-            // 2. 合併剩餘的所有換行符號（將公式拉回同一行）
-            text = text.replace(/\n/g, ' ');
-
-            // 3. 處理「同行但漏掉次方符號」的情況 (如 x3)
+            // 3. 【核心修復 2】偵測 "字母/括號" + "數字" (黏在一起的情況)
+            // 處理 x2 的情況
             text = text.replace(/([a-zA-Z\)])(\d+)/g, function(match, char, num) {
                 return num.length > 1 ? `${char}^{${num}}` : `${char}^${num}`;
             });
 
-            // 4. 清理 NotebookLM 的特殊符號與多餘空白
+            // 4. 符號標準化
             text = text.replace(/−/g, '-')
                        .replace(/×/g, '\\times ')
-                       .replace(/÷/g, '\\div ')
-                       .replace(/\s+/g, ' ');
+                       .replace(/÷/g, '\\div ');
 
             inputArea.value = text.trim();
             autoConvert();
@@ -138,12 +144,12 @@
             try {
                 const mml = MathJax.tex2mml(text);
                 navigator.clipboard.writeText(mml).then(() => {
-                    alert('已複製！請至 Word 貼上並選擇「只保留文字」。');
+                    alert('已複製！請貼上 Word。');
                 });
-            } catch (err) { alert('語法錯誤，請檢查內容。'); }
+            } catch (err) { alert('轉換錯誤'); }
         }
 
-        function clearAll() { if(confirm('確定清空？')) { inputArea.value = ''; autoConvert(); } }
+        function clearAll() { inputArea.value = ''; autoConvert(); }
     </script>
 </body>
 </html>
