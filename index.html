@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathLink Pro v4.3 | 亂碼智慧修復版</title>
+    <title>MathLink Pro v4.4 | 自動偵測與縮行版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -13,57 +13,64 @@
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .code-font { font-family: 'JetBrains Mono', monospace; }
         #preview .mjx-chtml { font-size: 1.8em !important; color: #1e293b; }
+        .btn-magic { @apply bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:from-orange-600 hover:to-red-700 transition-all flex items-center justify-center gap-2; }
     </style>
 </head>
 <body class="min-h-screen">
 
     <div class="flex flex-col md:flex-row min-h-screen">
         <aside class="w-full md:w-64 bg-white border-r border-slate-200 p-6 flex-shrink-0 flex flex-col shadow-sm">
-            <div class="flex items-center gap-3 mb-10">
+            <div class="flex items-center gap-3 mb-8">
                 <div class="bg-blue-600 text-white p-2 rounded-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 </div>
-                <h2 class="text-xl font-bold text-slate-800 tracking-tight">MathLink v4.3</h2>
+                <h2 class="text-xl font-bold text-slate-800 tracking-tight">MathLink v4.4</h2>
             </div>
 
-            <nav class="flex-1 space-y-2">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">亂碼救援</p>
-                <button class="w-full text-left px-4 py-3 text-sm bg-orange-500 text-white hover:bg-orange-600 rounded-xl shadow-md transition-all font-bold flex items-center gap-2" onclick="smartFixExponents()">
-                    <span>🚀</span> 修正數字變次方
-                </button>
-                <button class="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 rounded-lg mt-2" onclick="fixPdfText()">修復 PDF 符號 (√, π)</button>
+            <nav class="space-y-3 flex-1">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">AI 亂碼救援</p>
                 
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-8 mb-4">快速套用</p>
+                <button class="btn-magic w-full" onclick="superFix()">
+                    <span>🪄</span> 一鍵修復格式
+                </button>
+                
+                <p class="text-[10px] text-slate-400 leading-relaxed px-2 py-4 border-b border-slate-100 italic">
+                    功能：<br>1. 合併自動換行<br>2. 補上次方符號 (^)<br>3. 修復負號亂碼
+                </p>
+
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-6 mb-4">加工工具</p>
                 <button class="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 rounded-lg" onclick="applyTransform('sqrt')">加上根號</button>
                 <button class="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 rounded-lg" onclick="applyTransform('frac')">變成分數</button>
             </nav>
+            
+            <button onclick="clearAll()" class="mt-4 text-xs text-slate-400 hover:text-red-500 text-center">清空輸入框</button>
         </aside>
 
         <main class="flex-1 p-6 md:p-12 max-w-5xl mx-auto w-full">
-            <header class="mb-6 flex justify-between items-end">
-                <div>
-                    <h1 class="text-3xl font-bold text-slate-800">NotebookLM 專用轉換器</h1>
-                    <p class="text-slate-500 mt-2 text-sm">貼上 NotebookLM 亂碼後，點擊「修正數字變次方」即可修復</p>
-                </div>
-                <div id="copyStatus" class="bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-bold opacity-0 transition-all translate-y-2">✓ 已複製 MathML</div>
+            <header class="mb-6">
+                <h1 class="text-3xl font-bold text-slate-800">出題神器：自動格式化編輯器</h1>
+                <p class="text-slate-500 mt-2">專門解決 NotebookLM 換行與數字次方丟失問題</p>
             </header>
 
             <div class="space-y-6">
                 <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
+                    <div class="mb-4 flex justify-between items-center px-2">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">支援英數自動偵測 (如 x2 → x^2)</span>
+                    </div>
                     <textarea id="input" 
-                        class="w-full h-52 p-6 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 outline-none transition-all code-font text-xl text-slate-700"
-                        placeholder="在此貼上 NotebookLM 的文字..."
+                        class="w-full h-64 p-6 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 outline-none transition-all code-font text-xl text-slate-700 leading-relaxed"
+                        placeholder="在此貼上 NotebookLM 複製過來的亂碼內容..."
                         oninput="autoConvert()"></textarea>
                     
-                    <button onclick="copyToWord()" class="w-full mt-4 bg-slate-800 hover:bg-black text-white font-bold py-4 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-lg">
-                        複製到 Word
+                    <button onclick="copyToWord()" class="w-full mt-6 bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-lg transition-transform active:scale-[0.98]">
+                        複製到 Word (MathML)
                     </button>
                 </div>
 
                 <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 block text-center tracking-[0.2em]">修復後的公式預覽</label>
-                    <div id="preview" class="w-full min-h-[140px] flex items-center justify-center p-6 bg-white border-2 border-dashed border-slate-100 rounded-2xl overflow-x-auto">
-                        <span class="text-slate-300 italic text-lg">等待輸入...</span>
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 block text-center">最終渲染成果</label>
+                    <div id="preview" class="w-full min-h-[160px] flex items-center justify-center p-6 bg-white border-2 border-dashed border-slate-100 rounded-2xl overflow-x-auto">
+                        <span class="text-slate-300 italic">等待輸入內容...</span>
                     </div>
                 </div>
             </div>
@@ -76,23 +83,31 @@
         const statusMsg = document.getElementById('copyStatus');
 
         /**
-         * 智慧修復：將 x3, y2, z3 等文字轉為 LaTeX 的 x^3, y^2, z^3
-         * 同時處理 (x+y)2 這種括號後面的次方
+         * 超級修復功能：合併換行 + 自動偵測次方 (英+數)
          */
-        function smartFixExponents() {
+        function superFix() {
             let text = inputArea.value;
             if (!text) return;
 
-            // 規則：變數(x,y,z,a,b,c) 或 括號結尾 後面接著數字，通常是次方
-            // 我們排除掉一開始就是數字的情況 (例如 3xyz 的 3 不應該加 ^)
-            text = text.replace(/([xyzabc\)])(\d+)/g, '$1^$2');
-            
-            // 修正 NotebookLM 常見的減號符號
-            text = text.replace(/−/g, '-'); 
+            // 1. 修復自動換行：將所有換行符號取代為空格
+            text = text.replace(/\n/g, ' ');
 
-            inputArea.value = text;
+            // 2. 智慧偵測：英文字母、括號 後面直接跟數字 (排除係數情況)
+            // 邏輯：[a-zA-Z\)] 代表英文字母或右括號
+            // (\d+) 代表後面的數字
+            text = text.replace(/([a-zA-Z\)])(\d+)/g, function(match, char, num) {
+                // 如果數字只有一位數，直接 x^2；如果多位數，加括號 x^{12}
+                return num.length > 1 ? `${char}^{${num}}` : `${char}^${num}`;
+            });
+
+            // 3. 修正特殊符號
+            text = text.replace(/−/g, '-') // 修正長減號
+                       .replace(/×/g, '\\times ')
+                       .replace(/÷/g, '\\div ')
+                       .replace(/\s+/g, ' '); // 將多個空格縮減為一個
+
+            inputArea.value = text.trim();
             autoConvert();
-            alert('已嘗試修復次方格式！請檢查渲染結果是否正確。');
         }
 
         function cleanLatex(text) {
@@ -106,7 +121,7 @@
         function autoConvert() {
             let text = cleanLatex(inputArea.value);
             if (!text) {
-                previewArea.innerHTML = '<span class="text-slate-300 italic text-lg">等待輸入...</span>';
+                previewArea.innerHTML = '<span class="text-slate-300 italic">等待輸入內容...</span>';
                 return;
             }
             previewArea.innerHTML = '$$' + text + '$$';
@@ -119,14 +134,9 @@
             try {
                 const mml = MathJax.tex2mml(text);
                 navigator.clipboard.writeText(mml).then(() => {
-                    statusMsg.style.opacity = '1';
-                    statusMsg.style.transform = 'translateY(0)';
-                    setTimeout(() => { 
-                        statusMsg.style.opacity = '0'; 
-                        statusMsg.style.transform = 'translateY(8px)';
-                    }, 2500);
+                    alert('已複製！請到 Word 按 Ctrl+V 並選擇「只保留文字」。');
                 });
-            } catch (err) { alert('語法有誤，請檢查公式。'); }
+            } catch (err) { alert('轉換失敗，請手動檢查 LaTeX 代碼。'); }
         }
 
         function applyTransform(type) {
@@ -136,11 +146,6 @@
             let newText = (type === 'sqrt') ? `\\sqrt{${selectedText}}` : `\\frac{${selectedText}}{ }`;
             inputArea.setRangeText(newText, start, end, 'select');
             inputArea.focus();
-            autoConvert();
-        }
-
-        function fixPdfText() {
-            inputArea.value = inputArea.value.replace(/√/g, '\\sqrt{').replace(/±/g, '\\pm ').replace(/π/g, '\\pi ');
             autoConvert();
         }
 
