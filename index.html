@@ -2,52 +2,119 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>數學公式 Word 轉換器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathLink - 老師專用公式轉換器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
-        #preview { border: 1px solid #ccc; padding: 20px; margin-top: 10px; min-height: 50px; background: #f9f9f9; }
-        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px; }
-        button:hover { background-color: #0056b3; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .math-card { transition: all 0.3s ease; }
+        .math-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
     </style>
 </head>
-<body>
+<body class="min-h-screen py-12 px-4">
 
-    <h2>數學公式轉換器 (LaTeX to Word)</h2>
-    <p>請輸入 LaTeX 公式：</p>
-    <textarea id="input" placeholder="例如: \frac{-b \pm \sqrt{b^2-4ac}}{2a}"></textarea>
-    
-    <button onclick="convert()">1. 預覽公式</button>
-    <button onclick="copyToWord()">2. 複製到 Word</button>
+    <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">📐 MathLink 公式轉換器</h1>
+            <p class="text-slate-500">輸入 LaTeX 代碼，一鍵轉為 Word 可編輯公式物件</p>
+        </div>
 
-    <div id="preview">公式預覽將顯示於此...</div>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden math-card">
+            <div class="p-6 border-b border-slate-100">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">LaTeX 代碼輸入</label>
+                <textarea id="input" 
+                    class="w-full h-32 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all font-mono text-sm"
+                    placeholder="在此輸入公式，例如: \frac{-b \pm \sqrt{b^2-4ac}}{2a}"
+                    oninput="autoConvert()"></textarea>
+            </div>
+
+            <div class="px-6 py-4 bg-slate-50 flex flex-wrap gap-3">
+                <button onclick="copyToWord()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="Page-8 8H16M8 12H16M8 16H12M4 4h16v16H4z" />
+                    </svg>
+                    複製到 Word
+                </button>
+                <button onclick="clearAll()" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 font-semibold py-2.5 px-6 rounded-lg transition-colors">
+                    清空
+                </button>
+            </div>
+
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <label class="text-sm font-semibold text-slate-700">公式預覽</label>
+                    <span id="copyStatus" class="text-xs font-medium text-green-600 opacity-0 transition-opacity">已複製到剪貼簿！</span>
+                </div>
+                <div id="preview" class="w-full min-h-[100px] flex items-center justify-center bg-white border-2 border-dashed border-slate-100 rounded-xl p-4 text-2xl text-slate-800">
+                    等待輸入...
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                <h4 class="font-bold text-blue-800 mb-1">使用小撇步</h4>
+                <p class="text-blue-700">貼到 Word 後，若沒自動轉成公式，請按一下貼上選項選「只保留文字」。</p>
+            </div>
+            <div class="bg-slate-100 p-4 rounded-xl border border-slate-200">
+                <h4 class="font-bold text-slate-800 mb-1">老師必備</h4>
+                <p class="text-slate-600">本工具支援多行、矩陣、分式及各種國高中常用數學符號。</p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // 預覽功能
-        function convert() {
-            const input = document.getElementById('input').value;
-            const preview = document.getElementById('preview');
-            // 將輸入放入預覽區並請 MathJax 重新渲染
-            preview.innerHTML = '$$' + input + '$$';
-            MathJax.typeset();
+        // 自動預覽邏輯 (防抖處理，避免輸入太快當機)
+        let timer;
+        function autoConvert() {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                const input = document.getElementById('input').value;
+                const preview = document.getElementById('preview');
+                
+                if (!input.trim()) {
+                    preview.innerHTML = '<span class="text-slate-300 text-lg">等待輸入...</span>';
+                    return;
+                }
+
+                // 更新預覽內容
+                preview.innerHTML = '$$' + input + '$$';
+                
+                // 執行 MathJax 渲染
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }, 300);
         }
 
-        // 核心：複製 MathML 到剪貼簿
+        // 複製 MathML 到剪貼簿
         function copyToWord() {
             const input = document.getElementById('input').value;
-            
-            // 使用 MathJax 將 TeX 轉為 MathML 
-            // 這是 Word 唯一能直接識別的格式
-            const mml = MathJax.tex2mml(input);
+            if (!input.trim()) return;
 
-            // 將結果寫入剪貼簿
-            navigator.clipboard.writeText(mml).then(() => {
-                alert('已成功複製 MathML！現在可以直接在 Word 按 Ctrl+V 貼上。');
-            }).catch(err => {
-                console.error('複製失敗: ', err);
-            });
+            try {
+                // 將 LaTeX 轉為 MathML
+                const mml = MathJax.tex2mml(input);
+
+                navigator.clipboard.writeText(mml).then(() => {
+                    const status = document.getElementById('copyStatus');
+                    status.style.opacity = '1';
+                    setTimeout(() => { status.style.opacity = '0'; }, 2000);
+                });
+            } catch (err) {
+                alert('轉換失敗，請檢查 LaTeX 語法是否正確');
+                console.error(err);
+            }
+        }
+
+        // 清空功能
+        function clearAll() {
+            document.getElementById('input').value = '';
+            autoConvert();
         }
     </script>
 </body>
