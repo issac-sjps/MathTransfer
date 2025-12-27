@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathLink Pro v4.2 | 互動加工版</title>
+    <title>MathLink Pro v4.3 | 亂碼智慧修復版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -13,7 +13,6 @@
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .code-font { font-family: 'JetBrains Mono', monospace; }
         #preview .mjx-chtml { font-size: 1.8em !important; color: #1e293b; }
-        .tool-btn { @apply bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-sm font-semibold hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all flex items-center gap-1 shadow-sm; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -24,53 +23,47 @@
                 <div class="bg-blue-600 text-white p-2 rounded-xl">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                 </div>
-                <h2 class="text-xl font-bold text-slate-800 tracking-tight">MathLink v4.2</h2>
+                <h2 class="text-xl font-bold text-slate-800 tracking-tight">MathLink v4.3</h2>
             </div>
 
             <nav class="flex-1 space-y-2">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">預設模板</p>
-                <button class="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 rounded-lg" onclick="insertTemplate('cases')">聯立方程式</button>
-                <button class="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 rounded-lg" onclick="insertTemplate('root_formula')">求根公式全樣式</button>
-                <button class="w-full text-left px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 rounded-lg mt-4 font-bold" onclick="fixPdfText()">✨ 修復 PDF 符號</button>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">亂碼救援</p>
+                <button class="w-full text-left px-4 py-3 text-sm bg-orange-500 text-white hover:bg-orange-600 rounded-xl shadow-md transition-all font-bold flex items-center gap-2" onclick="smartFixExponents()">
+                    <span>🚀</span> 修正數字變次方
+                </button>
+                <button class="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 rounded-lg mt-2" onclick="fixPdfText()">修復 PDF 符號 (√, π)</button>
+                
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-8 mb-4">快速套用</p>
+                <button class="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 rounded-lg" onclick="applyTransform('sqrt')">加上根號</button>
+                <button class="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 rounded-lg" onclick="applyTransform('frac')">變成分數</button>
             </nav>
         </aside>
 
         <main class="flex-1 p-6 md:p-12 max-w-5xl mx-auto w-full">
             <header class="mb-6 flex justify-between items-end">
                 <div>
-                    <h1 class="text-3xl font-bold text-slate-800">公式加工編輯器</h1>
-                    <p class="text-slate-500 mt-2">選取文字後點擊工具列，可即時套用根號或分數</p>
+                    <h1 class="text-3xl font-bold text-slate-800">NotebookLM 專用轉換器</h1>
+                    <p class="text-slate-500 mt-2 text-sm">貼上 NotebookLM 亂碼後，點擊「修正數字變次方」即可修復</p>
                 </div>
-                <div id="copyStatus" class="bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-bold opacity-0 transition-all translate-y-2 shadow-lg">✓ 已複製 MathML</div>
+                <div id="copyStatus" class="bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-bold opacity-0 transition-all translate-y-2">✓ 已複製 MathML</div>
             </header>
-
-            <div class="flex flex-wrap gap-2 mb-4 p-2 bg-slate-100 rounded-xl border border-slate-200">
-                <button class="tool-btn" onclick="applyTransform('sqrt')"><span>√</span> 加上根號</button>
-                <button class="tool-btn" onclick="applyTransform('frac')"><span>÷</span> 變成分數</button>
-                <button class="tool-btn" onclick="applyTransform('pow')"><span>x²</span> 平方</button>
-                <button class="tool-btn" onclick="applyTransform('sub')"><span>xₙ</span> 下標</button>
-                <button class="tool-btn" onclick="applyTransform('paren')"><span>( )</span> 加上括號</button>
-                <button class="tool-btn" onclick="applyTransform('pm')"><span>±</span> 正負號</button>
-                <div class="h-6 w-px bg-slate-300 mx-1"></div>
-                <button class="tool-btn text-red-500" onclick="clearAll()">清空</button>
-            </div>
 
             <div class="space-y-6">
                 <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
                     <textarea id="input" 
-                        class="w-full h-52 p-6 bg-white border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 outline-none transition-all code-font text-xl text-slate-700"
-                        placeholder="在此貼上代碼，或選取文字後點擊上方工具列..."
+                        class="w-full h-52 p-6 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-blue-100 outline-none transition-all code-font text-xl text-slate-700"
+                        placeholder="在此貼上 NotebookLM 的文字..."
                         oninput="autoConvert()"></textarea>
                     
-                    <button onclick="copyToWord()" class="w-full mt-4 bg-slate-800 hover:bg-black text-white font-bold py-4 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-lg transition-all">
+                    <button onclick="copyToWord()" class="w-full mt-4 bg-slate-800 hover:bg-black text-white font-bold py-4 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-lg">
                         複製到 Word
                     </button>
                 </div>
 
                 <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 block text-center">即時渲染結果</label>
-                    <div id="preview" class="w-full min-h-[140px] flex items-center justify-center p-6 bg-slate-50/50 rounded-2xl overflow-x-auto">
-                        <span class="text-slate-300 italic">等待輸入...</span>
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 block text-center tracking-[0.2em]">修復後的公式預覽</label>
+                    <div id="preview" class="w-full min-h-[140px] flex items-center justify-center p-6 bg-white border-2 border-dashed border-slate-100 rounded-2xl overflow-x-auto">
+                        <span class="text-slate-300 italic text-lg">等待輸入...</span>
                     </div>
                 </div>
             </div>
@@ -82,6 +75,26 @@
         const previewArea = document.getElementById('preview');
         const statusMsg = document.getElementById('copyStatus');
 
+        /**
+         * 智慧修復：將 x3, y2, z3 等文字轉為 LaTeX 的 x^3, y^2, z^3
+         * 同時處理 (x+y)2 這種括號後面的次方
+         */
+        function smartFixExponents() {
+            let text = inputArea.value;
+            if (!text) return;
+
+            // 規則：變數(x,y,z,a,b,c) 或 括號結尾 後面接著數字，通常是次方
+            // 我們排除掉一開始就是數字的情況 (例如 3xyz 的 3 不應該加 ^)
+            text = text.replace(/([xyzabc\)])(\d+)/g, '$1^$2');
+            
+            // 修正 NotebookLM 常見的減號符號
+            text = text.replace(/−/g, '-'); 
+
+            inputArea.value = text;
+            autoConvert();
+            alert('已嘗試修復次方格式！請檢查渲染結果是否正確。');
+        }
+
         function cleanLatex(text) {
             return text.trim()
                 .replace(/```[a-z]*\n?/gi, '').replace(/```/g, '')
@@ -90,72 +103,14 @@
                 .trim();
         }
 
-        /**
-         * 核心功能：對選取的文字進行變形
-         */
-        function applyTransform(type) {
-            const start = inputArea.selectionStart;
-            const end = inputArea.selectionEnd;
-            const selectedText = inputArea.value.substring(start, end);
-            let newText = "";
-
-            switch(type) {
-                case 'sqrt':
-                    newText = `\\sqrt{${selectedText || ' '}}`;
-                    break;
-                case 'frac':
-                    newText = `\\frac{${selectedText || ' '}}{ }`;
-                    break;
-                case 'pow':
-                    newText = `${selectedText || 'x'}^{2}`;
-                    break;
-                case 'sub':
-                    newText = `${selectedText || 'x'}_{n}`;
-                    break;
-                case 'paren':
-                    newText = `(${selectedText})`;
-                    break;
-                case 'pm':
-                    newText = selectedText + `\\pm `;
-                    break;
-            }
-
-            // 取代原本選取的文字
-            inputArea.setRangeText(newText, start, end, 'select');
-            inputArea.focus();
-            
-            // 如果是分數，將游標移動到分母位置方便輸入
-            if(type === 'frac' && !selectedText) {
-                const pos = start + 7; // \frac{ 位置
-                inputArea.setSelectionRange(pos, pos);
-            }
-
-            autoConvert();
-        }
-
-        function insertTemplate(type) {
-            let template = "";
-            if(type === 'cases') template = "\\begin{cases}  \\\\  \\end{cases}";
-            if(type === 'root_formula') template = "x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}";
-            
-            const pos = inputArea.selectionStart;
-            inputArea.setRangeText(template, pos, pos, 'end');
-            inputArea.focus();
-            autoConvert();
-        }
-
-        let timer;
         function autoConvert() {
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                let text = cleanLatex(inputArea.value);
-                if (!text) {
-                    previewArea.innerHTML = '<span class="text-slate-300 italic">等待輸入...</span>';
-                    return;
-                }
-                previewArea.innerHTML = '$$' + text + '$$';
-                if (window.MathJax) MathJax.typesetPromise();
-            }, 250);
+            let text = cleanLatex(inputArea.value);
+            if (!text) {
+                previewArea.innerHTML = '<span class="text-slate-300 italic text-lg">等待輸入...</span>';
+                return;
+            }
+            previewArea.innerHTML = '$$' + text + '$$';
+            if (window.MathJax) MathJax.typesetPromise();
         }
 
         function copyToWord() {
@@ -171,7 +126,17 @@
                         statusMsg.style.transform = 'translateY(8px)';
                     }, 2500);
                 });
-            } catch (err) { alert('語法出錯。'); }
+            } catch (err) { alert('語法有誤，請檢查公式。'); }
+        }
+
+        function applyTransform(type) {
+            const start = inputArea.selectionStart;
+            const end = inputArea.selectionEnd;
+            const selectedText = inputArea.value.substring(start, end);
+            let newText = (type === 'sqrt') ? `\\sqrt{${selectedText}}` : `\\frac{${selectedText}}{ }`;
+            inputArea.setRangeText(newText, start, end, 'select');
+            inputArea.focus();
+            autoConvert();
         }
 
         function fixPdfText() {
@@ -179,7 +144,7 @@
             autoConvert();
         }
 
-        function clearAll() { if(confirm('清空內容？')) { inputArea.value = ''; autoConvert(); } }
+        function clearAll() { inputArea.value = ''; autoConvert(); }
     </script>
 </body>
 </html>
